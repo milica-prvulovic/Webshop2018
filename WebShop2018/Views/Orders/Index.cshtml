@@ -1,0 +1,84 @@
+﻿@using WebShop2018.Models
+@model WebShop2018.ViewModels.OrdersGridViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@*@Html.ActionLink("Test", "Test", (RouteValueDictionary)ViewBag.Test)*@
+
+@using (Html.BeginForm())
+{
+    <p>
+        Username contains: @Html.TextBox("query")
+        Max Total: @Html.TextBox("maxTotal")
+        <input type="submit" value="Search" />
+    </p>
+}
+
+<p>
+    @if (User.IsInRole(RolesConfig.ADMIN))
+    {
+        @Html.ActionLink("Create New", "Create")
+    }
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("User", "Index", Model.GetSortingParameters("User.Username"))
+        </th>
+        <th>
+            @Html.ActionLink("Comment", "Index", Model.GetSortingParameters("Comment"))
+        </th>
+        <th>
+            @Html.ActionLink("Created At", "Index", Model.GetSortingParameters("CreatedAt"))
+        </th>
+        <th>
+            @Html.ActionLink("State", "Index", Model.GetSortingParameters("State"))
+        </th>
+        <th>
+            @Html.ActionLink("Total", "Index", Model.GetSortingParameters("Total"))
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.Orders) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.User.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Comment)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedAt)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.State)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Total)
+        </td>
+        <td>
+            @if (User.IsInRole(RolesConfig.USER))
+            {
+                @Html.ActionLink("Details", "Details", new { id = item.Id })
+            }
+
+            @if (User.IsInRole(RolesConfig.ADMIN))
+            {
+                @Html.ActionLink("Details", "Details", new { id = item.Id })
+                @Html.Raw("|")
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                @Html.Raw("|")
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            }
+        </td>
+    </tr>
+}
+
+</table>
+
+@Html.Partial("_GridPager", Model)

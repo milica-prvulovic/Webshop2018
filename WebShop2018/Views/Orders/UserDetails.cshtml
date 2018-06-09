@@ -1,0 +1,107 @@
+﻿@model WebShop2018.Models.Order
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Order</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.User)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Comment)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Comment)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedAt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedAt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.State)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.State)
+        </dd>
+    </dl>
+</div>
+
+<table class="table">
+    <tr>
+        <th></th>
+        <th>
+            Item
+        </th>
+        <th>
+            Price
+        </th>
+        <th>
+           Quantity
+        </th>
+        <th>
+           Line Total
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var orderLine in Model.OrderLines)
+    {
+        <tr>
+            <td>
+                <img src="@string.Format("/Content/Artikli/{0}", orderLine.Item.ImeSlikeZaPrikaz)" style="width:100px;">
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => orderLine.Item.Naziv)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => orderLine.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => orderLine.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => orderLine.Total)
+            </td>
+            <td>
+                @Html.ActionLink("Add Item", "Edit", new { id = orderLine.Id })
+                @Html.ActionLink("Remove Item", "Edit", new { id = orderLine.Id })
+                @Html.ActionLink("Delete", "Edit", new { id = orderLine.Id })
+            </td>
+        </tr>
+    }
+
+    <tr class="text-danger text-uppercase">
+        <td colspan="3"> </td>
+        <td>
+            <b>Total Cost:</b>
+        </td>
+        <td>
+            <b>@Html.DisplayFor(model => model.Total)</b>
+        </td>
+        <td></td>
+    </tr>
+
+</table>
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

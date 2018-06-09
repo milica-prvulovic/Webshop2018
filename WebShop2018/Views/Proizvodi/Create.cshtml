@@ -1,0 +1,47 @@
+﻿@model WebShop2018.Models.Proizvod
+<h2>@ViewBag.Title</h2>
+@Html.ActionLink("Back", "Index")
+@*moramo da stavimo encoding za formu da bi poslali slliku (enctype = "multipart/form-data")*@
+@using (Html.BeginForm((string)ViewBag.Title, "Proizvodi", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.LabelFor(m => m.Naziv)
+    @Html.EditorFor(m => m.Naziv)
+    @Html.ValidationMessageFor(m => m.Naziv)
+
+    <br />
+    @Html.LabelFor(m => m.Cena)
+    @Html.EditorFor(m => m.Cena)
+    @Html.ValidationMessageFor(m => m.Cena)
+
+    <br />
+    @Html.LabelFor(m => m.Stanje)
+    @Html.EnumDropDownListFor(m => m.Stanje)
+    @Html.ValidationMessageFor(m => m.Stanje)
+
+    <br />
+    @Html.LabelFor(m => m.Kategorija)
+    @Html.DropDownListFor(m => m.Kategorija.Id,
+                                        new SelectList(ViewBag.Kategorije, "Id", "Naziv")
+                                      )
+    @Html.ValidationMessageFor(m => m.Kategorija)
+    <br />
+
+    foreach (var picture in Model.Slike)
+    {
+        <img src=@string.Format("/Content/Artikli/{0}", picture.Naziv) style="width:100px" />
+
+        @Html.RadioButtonFor(model => model.SlikaZaPrikazId, picture.Id, picture.Id == Model.SlikaZaPrikazId ? new Dictionary<string, object> { { "checked", "checked" } } : new Dictionary<string, object> { });
+        @Html.ActionLink("Delete", "DeleteImage", new { id = picture.Proizvod.Id, imeSlike = picture.Naziv })
+        @Html.ActionLink("Edit", "EditImage")
+    }
+
+    <br />
+    <label>Slika</label>
+    <input name="slika" type="file" accept="image/*" multiple="multiple" />
+
+    <br />
+    <input type="submit" value="Save" />
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
